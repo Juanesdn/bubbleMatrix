@@ -4,20 +4,23 @@ import random
 from decorators import *
 
 
-@timer
-def generarMatrizRecursiva():
+def MatrizRecursiva(n, m):
     '''
-    Genera una matriz de manera recursiva
+    Confirma que la matriz generada recursivamente contenga burbujas
     '''
+    matriz = []
+    field = []
 
-    return None
+    generarMatrizRecursiva(matriz, field, n, m, 0, 0)
 
-@timer
-def generarMatrizIterativa(n, m):
+    print('\n'.join([''.join(['{:4}'.format(item) for item in row]) 
+        for row in matriz]))
+
+def MatrizIterativa(n, m):
     '''
-    Genera una matriz de manera iterativa
+    Confirma que la matriz generada iterativamente contenga burbujas
     '''
-    matriz = generarMatriz(n, m)
+    matriz = generarMatrizIterativa(n, m)
 
     bubbles = False
 
@@ -26,13 +29,16 @@ def generarMatrizIterativa(n, m):
         if(validarBurbujas(matriz, n, m)):
             bubbles = True
         else:
-            matriz = generarMatriz(n, m)
+            matriz = generarMatrizIterativa(n, m)
 
     print('\n'.join([''.join(['{:4}'.format(item) for item in row]) 
-      for row in matriz]))
+        for row in matriz]))
 
 
 def validarBurbujas(matriz, n, m):
+    '''
+    Valido si la matriz contiene burbujas
+    '''
     contieneBurbujas = False
     cant_burbujas = 0
 
@@ -91,7 +97,12 @@ def validarBurbujas(matriz, n, m):
     else:
         return False
 
-def generarMatriz(n, m):
+
+@timer
+def generarMatrizIterativa(n, m):
+    '''
+    Genera una matriz de manera iterativa
+    '''
     matriz = []
     field = []
 
@@ -101,5 +112,47 @@ def generarMatriz(n, m):
             rnd = random.choice('ox')
             field.append(rnd)
         matriz.append(field)
-    
+
     return matriz
+
+
+@timer
+def generarMatrizRecursiva(matriz ,field, n, m, i, j):
+    '''
+    Genera una matriz de manera recursiva
+    '''
+
+    if (i < n):
+        if(j < m):
+            rnd = random.choice('ox')
+            field.append(rnd)
+            generarMatrizRecursiva(matriz, field,n, m, i, j+1)
+        else:
+            matriz.append(field)
+            field = []
+            generarMatrizRecursiva(matriz, field, n, m, i+1, j-m)
+
+
+
+def main():
+    leer_pos = True
+
+    while(leer_pos):
+        try:
+            n = input("Inserte la cantidad de filas ")
+            n = int(n)
+
+            m = input("Inserte la cantidad de columnas ")
+            m = int(m)
+
+            leer_pos = False
+
+        except Exception:
+            print("Lo siento, solo acepto numeros")
+
+
+    #MatrizIterativa(n, m)
+    MatrizRecursiva(n, m)
+
+if __name__ == "__main__":
+    main()
